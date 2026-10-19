@@ -1,0 +1,15 @@
+.channel-summary{display:flex;align-items:center;gap:12px}
+.channel-info{min-width:0}
+.channel-logo{width:54px;height:44px;flex-shrink:0;background:var(--logo-bg);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;overflow:hidden;position:relative}
+.channel-logo img{width:100%;height:100%;object-fit:contain;padding:5px;position:absolute;inset:0}
+.channel-logo img.pending{opacity:0}
+.logo-fallback{font-size:12px;font-weight:700;color:var(--subtle)}
+.channel-actions{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.edited-label{font-size:10px;color:var(--accent);display:block;margin-top:4px}
+#channel-edit-form>label{display:block;font-size:13px;font-weight:600;margin:18px 0 8px}
+#channel-edit-form>.notice{margin-top:15px}
+.edit-channel-heading{display:flex;align-items:center;gap:14px;margin:0 0 20px}
+.edit-channel-heading .hint{margin:0;overflow-wrap:anywhere}
+.edit-channel-heading .channel-logo{width:72px;height:56px}
+#channel-edit-form .dialog-bottom{margin-top:20px}
+@media(max-width:900px){.channels-panel table{min-width:850px}}

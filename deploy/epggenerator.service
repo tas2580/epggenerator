@@ -1,0 +1,23 @@
+[Unit]
+Description=EPG Generator
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=epggenerator
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/epggenerator
+ExecStart=/opt/epggenerator/epggenerator -config /etc/epggenerator/config.json -data-dir /var/lib/epggenerator
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=60
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

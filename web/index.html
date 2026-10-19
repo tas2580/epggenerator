@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>EPG Generator</title>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/channels.css">
+  <link rel="stylesheet" href="/theme.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="EPG Generator Startseite"><span class="brand-icon" aria-hidden="true">▤</span> EPG Generator</a>
+    <div class="header-actions">
+      <span class="local-label"><span class="dot"></span> Dein TV. Dein Programm.</span>
+      <button id="theme-toggle" class="secondary theme-toggle" type="button" aria-label="Design wechseln"><span id="theme-icon" aria-hidden="true">◐</span><span id="theme-label">System</span></button>
+    </div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">PLAYLIST & PROGRAMMDATEN</p><h1>Ein Programm für deine Sender.</h1><p class="lead">Ordne deine Sender zu. Dein EPG enthält genau die Sender deiner Playlist – auch ohne Programmdaten.</p></div>
+      <button id="refresh" class="primary" data-mutation type="button">↻ Jetzt aktualisieren</button>
+    </section>
+    <div id="notice" class="notice" role="alert" hidden></div>
+    <div id="activity" class="activity" role="status" aria-live="polite">Verbindung wird hergestellt …</div>
+    <section class="stats" aria-label="Übersicht">
+      <div class="stat"><span>Playlist-Sender</span><strong id="total">–</strong><small>Alle bleiben erhalten</small></div>
+      <div class="stat"><span>Mit EPG zugeordnet</span><strong id="mapped">–</strong><small id="unmapped">–</small></div>
+      <div class="stat"><span>EPG-Sender verfügbar</span><strong id="epg-count">–</strong><small>In deiner EPG-Quelle</small></div>
+      <div class="stat"><span>Sendungen im Export</span><strong id="programmes">–</strong><small id="generated">Noch keine Ausgabe</small></div>
+    </section>
+    <div class="configuration">
+      <details id="sources" class="panel">
+        <summary><span>Quellen einstellen</span><span class="summary-note">EPG und Playlist</span></summary>
+        <form id="settings-form">
+          <label for="epg-url">EPG-URL <span>XMLTV</span></label>
+          <input id="epg-url" name="epg-url" type="url" required placeholder="https://example.org/epg.xml" autocomplete="off" spellcheck="false">
+          <label for="playlist-source-type">Playlist-Quelle <span>M3U / M3U8</span></label>
+          <select id="playlist-source-type" name="playlist-source-type"><option value="url">URL</option><option value="file">Lokale Datei auf dem Server</option></select>
+          <label id="playlist-url-label" for="playlist-url">Playlist-URL</label>
+          <input id="playlist-url" name="playlist-url" type="url" required placeholder="http://tv.lan/tv.m3u8" autocomplete="off" spellcheck="false">
+          <label id="playlist-file-label" for="playlist-file" hidden>Playlist-Dateipfad</label>
+          <input id="playlist-file" name="playlist-file" type="text" placeholder="/pfad/zur/tv.m3u8" aria-describedby="playlist-file-hint" autocomplete="off" spellcheck="false" hidden disabled>
+          <p id="playlist-file-hint" class="hint" hidden>Die Datei muss auf dem Rechner des EPG-Dienstes liegen und für ihn lesbar sein. Relative Pfade beziehen sich auf dessen Arbeitsverzeichnis. Die Datei wird bei jeder Aktualisierung neu eingelesen.</p>
+          <div class="form-footer"><p id="interval-note">Automatische Aktualisierung alle 6 Stunden.</p><button class="primary" data-mutation type="submit">Speichern und aktualisieren</button></div>
+        </form>
+      </details>
+      <section class="panel exports" aria-labelledby="exports-title">
+        <h2 id="exports-title">Deine Dateien</h2>
+        <div class="export-row"><div><strong>EPG-Datei</strong><a id="epg-link" href="/epg.xml">/epg.xml</a></div><a class="button secondary" id="epg-download" href="/epg.xml?download=1">XML laden ↓</a></div>
+        <div class="export-row"><div><strong>Passende Playlist</strong><a id="playlist-link" href="/playlist.m3u8">/playlist.m3u8</a></div><a class="button secondary" id="playlist-download" href="/playlist.m3u8?download=1">M3U8 laden ↓</a></div>
+        <p class="hint">Verwende diese Playlist für passende Sender-IDs. Alle Sender und Stream-Adressen bleiben erhalten.</p>
+      </section>
+    </div>
+    <section class="panel channels-panel" aria-labelledby="channels-title">
+      <div class="section-heading"><div><h2 id="channels-title">Deine Sender</h2><p>Namen und Kategorien bearbeiten, Logos ansehen und EPG zuordnen.</p></div><button id="accept-exact" class="secondary" data-mutation type="button" hidden>ID-Treffer übernehmen</button></div>
+      <div class="toolbar">
+        <label class="search-label" for="search"><span class="sr-only">Sender suchen</span><input id="search" type="search" placeholder="Sender, Kategorie oder ID suchen …"></label>
+        <label for="status-filter" class="sr-only">Zuordnungsstatus</label><select id="status-filter"><option value="all">Alle Sender</option><option value="mapped">Mit Zuordnung</option><option value="unmapped">Ohne Zuordnung</option><option value="review">Zu prüfen</option></select>
+        <label for="group-filter" class="sr-only">Kategorie</label><select id="group-filter"><option value="">Alle Kategorien</option></select>
+        <span id="visible-count" class="count"></span>
+      </div>
+      <div class="table-scroll"><table><thead><tr><th class="number-col">#</th><th>Playlist-Sender</th><th>EPG-Zuordnung</th><th>Status</th><th><span class="sr-only">Aktionen</span></th></tr></thead><tbody id="channel-rows"></tbody></table></div>
+      <p id="empty" class="empty">Die Quellen werden geladen. Du kannst ihre URLs oben einstellen.</p>
+      <div class="table-footer">Ohne Zuordnung bleibt der Sender im Export enthalten – ohne Sendungen.</div>
+    </section>
+    <footer><span>EPG Generator · Lokal in deinem Netzwerk</span><span id="last-refresh">Noch nicht aktualisiert</span></footer>
+  </main>
+  <dialog id="mapping-dialog" aria-labelledby="dialog-title">
+    <form method="dialog" class="dialog-top"><div><p class="eyebrow">EPG ZUORDNEN</p><h2 id="dialog-title">Sender auswählen</h2></div><button class="icon-button" aria-label="Schließen" value="cancel">×</button></form>
+    <label for="epg-search" class="sr-only">EPG-Sender durchsuchen</label><input id="epg-search" type="search" placeholder="EPG-Sender oder ID suchen …" autocomplete="off">
+    <div id="epg-options" class="epg-options" role="group" aria-label="Verfügbare EPG-Sender"></div>
+    <div class="dialog-bottom"><p id="selection-label" aria-live="polite">Keine Zuordnung</p><button id="save-mapping" class="primary" data-mutation type="button">Zuordnung speichern</button></div>
+  </dialog>
+  <dialog id="channel-dialog" aria-labelledby="channel-dialog-title">
+    <form id="channel-edit-form">
+      <div class="dialog-top"><div><p class="eyebrow">SENDER BEARBEITEN</p><h2 id="channel-dialog-title">Name und Kategorie</h2></div><button id="close-channel-dialog" type="button" class="icon-button" aria-label="Schließen">×</button></div>
+      <div class="edit-channel-heading"><div id="edit-channel-logo"></div><p id="channel-original" class="hint"></p></div>
+      <label for="channel-name">Sendername</label>
+      <input id="channel-name" type="text" required maxlength="200" autocomplete="off">
+      <label for="channel-group">Kategorie</label>
+      <input id="channel-group" type="text" maxlength="200" list="channel-categories" autocomplete="off" placeholder="Zum Beispiel Nachrichten oder Sport">
+      <datalist id="channel-categories"></datalist>
+      <p class="hint">Eine Kategorie auswählen oder neu eingeben. Ein leeres Feld entfernt die Kategorie. Die Änderungen gelten für die erzeugten Dateien.</p>
+      <p id="channel-edit-error" class="notice" role="alert" hidden></p>
+      <div class="dialog-bottom"><button id="reset-channel" class="secondary" data-mutation type="button">Quellwerte übernehmen</button><button class="primary" data-mutation type="submit">Änderungen speichern</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

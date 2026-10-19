@@ -1,0 +1,100 @@
+:root {
+  color-scheme: light;
+  --text: #202b40;
+  --canvas: #f4f6fa;
+  --surface: #fff;
+  --accent: #5746d9;
+  --primary: #5746d9;
+  --primary-hover: #4534c4;
+  --muted: #6b7587;
+  --border: #e5e9f1;
+  --secondary-text: #3e4960;
+  --secondary-hover: #f5f4ff;
+  --secondary-hover-border: #cec8f8;
+  --focus: #a99fee;
+  --input-border: #dce1ec;
+  --input-text: #25314a;
+  --placeholder: #8a93a4;
+  --online: #2e9b78;
+  --spinner: #d6d1f8;
+  --notice-border: #f0cfaa;
+  --notice-bg: #fff7eb;
+  --notice-text: #8b4c18;
+  --table-head: #f8f9fc;
+  --table-label: #7b8494;
+  --row-border: #edf0f5;
+  --row-hover: #fcfcff;
+  --subtle: #929bad;
+  --suggestion: #525074;
+  --badge-bg: #f0f2f6;
+  --badge-text: #737e90;
+  --success-bg: #eaf7f0;
+  --success-text: #257252;
+  --review-bg: #fff3df;
+  --review-text: #996522;
+  --table-footer: #fcfcfe;
+  --footer-text: #8992a3;
+  --dialog-shadow: #15234733;
+  --backdrop: #15213c66;
+  --option-hover: #f8f7ff;
+  --selected-border: #c9c2f4;
+  --selected-bg: #f3f1ff;
+  --logo-bg: #f5f6fa;
+  --logo-text: #6b7587;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text: #e5eaf5;
+  --canvas: #101522;
+  --surface: #192132;
+  --accent: #b8adff;
+  --primary: #6554dd;
+  --primary-hover: #7564ef;
+  --muted: #a6b1c6;
+  --border: #323e54;
+  --secondary-text: #d9e0ee;
+  --secondary-hover: #2a2947;
+  --secondary-hover-border: #665b9c;
+  --focus: #b8adff;
+  --input-border: #46536c;
+  --input-text: #e5eaf5;
+  --placeholder: #99a5bc;
+  --online: #58c99a;
+  --spinner: #46405f;
+  --notice-border: #795c37;
+  --notice-bg: #35291f;
+  --notice-text: #f2c58e;
+  --table-head: #151d2c;
+  --table-label: #aab6cc;
+  --row-border: #2a354a;
+  --row-hover: #202b40;
+  --subtle: #a1afc6;
+  --suggestion: #cdc5f4;
+  --badge-bg: #29354b;
+  --badge-text: #b9c6dc;
+  --success-bg: #183c31;
+  --success-text: #84d8ac;
+  --review-bg: #40321f;
+  --review-text: #e9c07b;
+  --table-footer: #151d2c;
+  --footer-text: #9ba9c0;
+  --dialog-shadow: #0008;
+  --backdrop: #060b18bb;
+  --option-hover: #272840;
+  --selected-border: #8372cf;
+  --selected-bg: #332c53;
+  --logo-bg: #dce2ec;
+  --logo-text: #526076;
+}
+
+.header-actions { display: flex; align-items: center; gap: 18px; }
+.theme-toggle { min-width: 110px; }
+#theme-icon { font-size: 17px; line-height: 1; }
+dialog { background: var(--surface); }
+.epg-option { color: var(--text); }
+.logo-fallback { color: var(--logo-text); }
+@media (max-width: 600px) {
+  .header-actions { gap: 0; }
+  .theme-toggle { min-width: 88px; padding: 8px 10px; }
+}
